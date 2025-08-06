@@ -12,6 +12,8 @@ class Game
 	Rect rightPaddle;
 	u32 kDown;
 	u32 kDownPrev;
+	int leftScore;
+	int rightScore;
 private:
 	void draw();
 	void update();

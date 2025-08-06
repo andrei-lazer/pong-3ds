@@ -20,9 +20,10 @@ Game::Game()
 			PongConstants::RIGHT_SPAWN_Y,
 			PongConstants::PADDLE_WIDTH,
 			PongConstants::PADDLE_HEIGHT
-			)
+			),
+	leftScore(0), rightScore(0)
 {
-	ball.setVelocityCartesian(-1, 1);
+	ball.setVelocity(-1, 1);
 }
 
 bool Game::handleInputs()
@@ -40,29 +41,29 @@ bool Game::handleInputs()
 	// left paddle moves w dpad/circle pad
 	if (kDown & KEY_UP)
 	{
-		leftPaddle.setVelocityCartesian(0, -PongConstants::PADDLE_SPEED);
+		leftPaddle.setVelocity(0, -PongConstants::PADDLE_SPEED);
 	}
 	else if (kDown & KEY_DOWN)
 	{
-		leftPaddle.setVelocityCartesian(0, PongConstants::PADDLE_SPEED);
+		leftPaddle.setVelocity(0, PongConstants::PADDLE_SPEED);
 	}
 	else
 	{
-		leftPaddle.setVelocityCartesian(0, 0);
+		leftPaddle.setVelocity(0, 0);
 	}
 
 	// right paddle moves with XYAB
 	if (kDown & KEY_X)
 	{
-		rightPaddle.setVelocityCartesian(0, -PongConstants::PADDLE_SPEED);
+		rightPaddle.setVelocity(0, -PongConstants::PADDLE_SPEED);
 	}
 	else if (kDown & KEY_B)
 	{
-		rightPaddle.setVelocityCartesian(0, PongConstants::PADDLE_SPEED);
+		rightPaddle.setVelocity(0, PongConstants::PADDLE_SPEED);
 	}
 	else
 	{
-		rightPaddle.setVelocityCartesian(0, 0);
+		rightPaddle.setVelocity(0, 0);
 	}
 
 	return false;
@@ -71,10 +72,10 @@ bool Game::handleInputs()
 void Game::handleCollisions()
 {
 	// make ball bounce off the top and botton, and the paddles
-	bool bounceOffWalls = ball.getY() <= 0 || ball.getY() >= TOP_SCREEN_HEIGHT - ball.h;
-	if (bounceOffWalls)
+	bool bounceOffTopBottom = ball.getY() <= 0 || ball.getY() >= TOP_SCREEN_HEIGHT - ball.h;
+	if (bounceOffTopBottom)
 	{
-		ball.setVelocityCartesian(ball.getVX(), -ball.getVY());
+		ball.reflectY();
 	}
 
 	bool bounceOffLeft = (ball.getX() < leftPaddle.getX() + PongConstants::PADDLE_WIDTH) &&
@@ -82,7 +83,7 @@ void Game::handleCollisions()
 
 	if (bounceOffLeft)
 	{
-		ball.setVelocityCartesian(-ball.getVX(), ball.getVY());
+		ball.reflectX();
 	}
 
 	bool bounceOffRight = (ball.getX() + PongConstants::BALL_SIZE > rightPaddle.getX()) &&
@@ -90,14 +91,20 @@ void Game::handleCollisions()
 
 	if (bounceOffRight)
 	{
-		ball.setVelocityCartesian(-ball.getVX(), ball.getVY());
+		ball.reflectX();
 	}
 
-	bool bounceOffSides = ball.getX() <= 0 || ball.getX() >= TOP_SCREEN_WIDTH - ball.w;
-
-	if (bounceOffSides)
+	// check if a score needs to be added to
+	
+	if (ball.getX() <= 0)
 	{
-		ball.setVelocityCartesian(-ball.getVX(), ball.getVY());
+		rightScore++;
+		ball.reflectX();
+	}
+	else if (ball.getX() >= TOP_SCREEN_WIDTH - PongConstants::BALL_SIZE)
+	{
+		leftScore++;
+		ball.reflectX();
 	}
 }
 
@@ -110,17 +117,19 @@ void Game::draw()
 		renderer.drawRect(ball);
 		renderer.drawRect(leftPaddle);
 		renderer.drawRect(rightPaddle);
+
+		// draw the score to the bottom screen
+		renderer.drawScores(leftScore, rightScore);
+
 		// never delete this - always needs to be at the end of the loop.
 		C3D_FrameEnd(0);
 }
 
 void Game::update()
 {
-	handleCollisions();
-
-	leftPaddle.updatePos();
-	rightPaddle.updatePos();
-	ball.updatePos();
+	leftPaddle.update();
+	rightPaddle.update();
+	ball.update();
 }
 
 void Game::run()
@@ -133,6 +142,7 @@ void Game::run()
 			break;
 		}
 
+		handleCollisions();
 		update();
 		draw();
 	}

@@ -13,10 +13,12 @@ public:
 	float getY() { return y; };
 	float getVX() { return vX; };
 	float getVY() { return vY; };
-	void setVelocityCartesian(float newVX, float newVY);
-	void setVelocityPolar(float mag, float angle);
-	void updatePos();
-	// void setPosition(float x, float y);
+
+	void setVelocity(float newVX, float newVY);
+	void reflectX();
+	void reflectY();
+	void update();
+
 	const float w;
 	const float h;
 };

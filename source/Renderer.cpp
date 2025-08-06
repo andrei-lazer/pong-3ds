@@ -46,3 +46,21 @@ void Renderer::drawRect(Rect rect)
 	C2D_SceneBegin(topScreen);
 	C2D_DrawRectSolid(rect.getX(), rect.getY(), 0, rect.w, rect.h, white);
 }
+
+void Renderer::drawScores(int leftScore, int rightScore)
+{
+	std::string leftString = std::to_string(leftScore);
+	std::string rightString = std::to_string(rightScore);
+	C2D_SceneBegin(bottomScreen);
+	// left score
+	C2D_TextBufClear(C2DTextBuf);
+	C2D_TextParse(&C2DText, C2DTextBuf, leftString.c_str());
+	C2D_TextOptimize(&C2DText);
+	C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 100, 100, 0.0f, 1.5, 1.5, white);
+	// right score
+	C2D_TextBufClear(C2DTextBuf);
+	C2D_TextParse(&C2DText, C2DTextBuf, rightString.c_str());
+	C2D_TextOptimize(&C2DText);
+	C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 200, 100, 0.0f, 1.5, 1.5, white);
+
+}

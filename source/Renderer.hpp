@@ -19,6 +19,7 @@ public:
 	void clearTopScreen();
 	void clearBottomScreen();
 	void drawRect(Rect rect);
+	void drawScores(int leftScore, int rightScore);
 private:
     C2D_TextBuf C2DTextBuf;
     C2D_Text C2DText;

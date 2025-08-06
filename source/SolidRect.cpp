@@ -7,18 +7,23 @@ Rect::Rect(float x, float y, float w, float h)
 	: x(x), y(y), w(w), h(h)
 {}
 
-void Rect::setVelocityCartesian(float newVX, float newVY)
+void Rect::setVelocity(float newVX, float newVY)
 {
 	vX = newVX;
 	vY = newVY;
 }
 
-void Rect::setVelocityPolar(float mag, float angle)
+void Rect::reflectX()
 {
-
+	vX = -vX;
 }
 
-void Rect::updatePos()
+void Rect::reflectY()
+{
+	vY = -vY;
+}
+
+void Rect::update()
 {
 	x += vX;
 	y += vY;
