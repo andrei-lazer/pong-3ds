@@ -17,6 +17,7 @@ private:
 	void update();
 	bool handleInputs();
 	void moveBall();
+	void handleCollisions();
 public:
 	Game();
 	void run();

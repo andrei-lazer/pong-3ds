@@ -22,7 +22,7 @@ Game::Game()
 			PongConstants::PADDLE_HEIGHT
 			)
 {
-	ball.setVelocityCartesian(1, 1);
+	ball.setVelocityCartesian(-1, 1);
 }
 
 bool Game::handleInputs()
@@ -68,6 +68,39 @@ bool Game::handleInputs()
 	return false;
 }
 
+void Game::handleCollisions()
+{
+	// make ball bounce off the top and botton, and the paddles
+	bool bounceOffWalls = ball.getY() <= 0 || ball.getY() >= TOP_SCREEN_HEIGHT - ball.h;
+	if (bounceOffWalls)
+	{
+		ball.setVelocityCartesian(ball.getVX(), -ball.getVY());
+	}
+
+	bool bounceOffLeft = (ball.getX() < leftPaddle.getX() + PongConstants::PADDLE_WIDTH) &&
+		(ball.getY() > leftPaddle.getY()) && (ball.getY() < leftPaddle.getY() + PongConstants::PADDLE_HEIGHT);
+
+	if (bounceOffLeft)
+	{
+		ball.setVelocityCartesian(-ball.getVX(), ball.getVY());
+	}
+
+	bool bounceOffRight = (ball.getX() + PongConstants::BALL_SIZE > rightPaddle.getX()) &&
+		(ball.getY() > rightPaddle.getY()) && (ball.getY() < rightPaddle.getY() + PongConstants::PADDLE_HEIGHT);
+
+	if (bounceOffRight)
+	{
+		ball.setVelocityCartesian(-ball.getVX(), ball.getVY());
+	}
+
+	bool bounceOffSides = ball.getX() <= 0 || ball.getX() >= TOP_SCREEN_WIDTH - ball.w;
+
+	if (bounceOffSides)
+	{
+		ball.setVelocityCartesian(-ball.getVX(), ball.getVY());
+	}
+}
+
 void Game::draw()
 {
 		renderer.initFrame();
@@ -83,6 +116,8 @@ void Game::draw()
 
 void Game::update()
 {
+	handleCollisions();
+
 	leftPaddle.updatePos();
 	rightPaddle.updatePos();
 	ball.updatePos();
