@@ -1,4 +1,3 @@
-# Anki for 3DS
+# Pong for the 3DS
 
-This is a remake of Anki for 3DS. I'm not sure how achievable this is, but I'm going to try to have
-at least some very basic functionality.
+A remake of Pong for the Nintendo 3DS. Currently in development.
