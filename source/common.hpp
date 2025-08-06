@@ -1,0 +1,35 @@
+#pragma once
+
+#define TOP_SCREEN_WIDTH 400.0
+#define TOP_SCREEN_HEIGHT 240.0
+#define BOTTOM_SCREEN_WIDTH 320.0
+#define BOTTOM_SCREEN_HEIGHT 240.0
+
+// #include "c2d/base.h"
+#include <citro2d.h>
+
+const u32 white = C2D_Color32(0xFF, 0xFF, 0xFF, 0xFF);
+const u32 black = C2D_Color32(0x00, 0x00, 0x00, 0x00);
+const u32 green = C2D_Color32(0x00, 0xFF, 0x00, 0xFF);
+const u32 red   = C2D_Color32(0xFF, 0x00, 0x00, 0xFF);
+const u32 blue  = C2D_Color32(0x00, 0x00, 0xFF, 0xFF);
+
+const u32 background_colour = C2D_Color32(0x68, 0xB0, 0xD8, 0xFF);
+
+namespace PongConstants
+{
+	constexpr float BALL_SIZE = 10.0f;
+	constexpr float BALL_SPAWN_X = TOP_SCREEN_WIDTH/2 - BALL_SIZE/2;
+	constexpr float BALL_SPAWN_Y = TOP_SCREEN_HEIGHT/2 - BALL_SIZE/2;
+
+	constexpr float PADDLE_WIDTH = 10.0f;
+	constexpr float PADDLE_HEIGHT = 50.0f;
+
+	constexpr float LEFT_SPAWN_X = 10.0f;
+	constexpr float LEFT_SPAWN_Y = TOP_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
+	constexpr float RIGHT_SPAWN_X = TOP_SCREEN_WIDTH - 10.0f - PADDLE_WIDTH;
+	constexpr float RIGHT_SPAWN_Y = TOP_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
+
+	constexpr float PADDLE_SPEED = 3.0f;
+	constexpr float BALL_SPEED = 3.0f;
+}
