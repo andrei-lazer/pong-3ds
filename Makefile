@@ -39,6 +39,10 @@ INCLUDES	:=	include
 GRAPHICS	:=	gfx
 ROMFS		:=	romfs
 GFXBUILD	:=	$(ROMFS)
+
+APP_TITLE   := Pong
+APP_AUTHOR  := Andrei Lazer
+ICON        :=  icon.png
 #GFXBUILD	:=	$(ROMFS)/gfx
 
 #---------------------------------------------------------------------------------

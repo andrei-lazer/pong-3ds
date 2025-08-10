@@ -1,5 +1,6 @@
 #include "Renderer.hpp"
 #include <string>
+#include "Button.hpp"
 
 Renderer::Renderer()
 {
@@ -41,6 +42,22 @@ void Renderer::clearBottomScreen()
 	C2D_TargetClear(bottomScreen, background_colour);
 }
 
+void Renderer::centredText(float x, float y, float xscale, float yscale, C3D_RenderTarget* screen, u32 colour, const char* text)
+{
+	C2D_SceneBegin(screen);
+	C2D_TextBufClear(C2DTextBuf);
+	C2D_TextParse(&C2DText, C2DTextBuf, text);
+	C2D_TextOptimize(&C2DText);
+
+	float width, height;
+	C2D_TextGetDimensions(&C2DText, xscale, yscale, &width, &height);
+
+	float cornerX = x - width/2;
+	float cornerY = y - height/2;
+
+	C2D_DrawText(&C2DText, C2D_WithColor, cornerX, cornerY, 0.0f, xscale, yscale, colour);
+}
+
 void Renderer::drawRect(Rect rect)
 {
 	C2D_SceneBegin(topScreen);
@@ -62,5 +79,28 @@ void Renderer::drawScores(int leftScore, int rightScore)
 	C2D_TextParse(&C2DText, C2DTextBuf, rightString.c_str());
 	C2D_TextOptimize(&C2DText);
 	C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 200, 100, 0.0f, 1.5, 1.5, white);
+}
 
+void Renderer::drawButton(Button b)
+{
+	// draw the rectangle
+	C2D_SceneBegin(enumToTarget(b.screen));
+	// draw border
+	/* C2D_DrawRectSolid(b.x, b.y, 0, b.w, b.y, b.borderColour); */
+	/* C2D_DrawRectSolid(b.x+b.borderWidth, b.y+b.borderWidth, 0, b.w-b.borderWidth*2, b.y-b.borderWidth*2, b.bgColour); */
+	centredText(b.x + b.w/2, b.y + b.h/2, 1, 1, bottomScreen, b.bgColour, b.text);
+}
+
+C3D_RenderTarget* Renderer::enumToTarget(screen_e screen)
+{
+	switch (screen)
+	{
+		case (BOTTOM):
+			return bottomScreen;
+			break;
+		case (TOP):
+		default:
+			return topScreen;
+			break;
+	}
 }

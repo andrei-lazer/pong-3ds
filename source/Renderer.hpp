@@ -5,24 +5,31 @@
 #include <string>
 
 #include "common.hpp"
-#include "SolidRect.hpp"
-// #include "Font.hpp"
-// #include "Card.hpp"
-// #include "Button.hpp"
+#include "Rect.hpp"
+/* #include "Button.hpp" */
+class Button;
 
 class Renderer {
-public:
-    Renderer();
-    ~Renderer();
-    void init();
-	void initFrame();
-	void clearTopScreen();
-	void clearBottomScreen();
-	void drawRect(Rect rect);
-	void drawScores(int leftScore, int rightScore);
-private:
-    C2D_TextBuf C2DTextBuf;
-    C2D_Text C2DText;
-    C3D_RenderTarget* topScreen;
-    C3D_RenderTarget* bottomScreen;
+	public:
+		typedef enum {
+			BOTTOM=0,
+			TOP
+		} screen_e;
+		Renderer();
+		~Renderer();
+		void init();
+		void initFrame();
+		void clearTopScreen();
+		void clearBottomScreen();
+		void drawRect(Rect rect);
+		void drawScores(int leftScore, int rightScore);
+		void drawButton(Button b);
+	private:
+		C2D_TextBuf C2DTextBuf;
+		C2D_Text C2DText;
+		C3D_RenderTarget* topScreen;
+		C3D_RenderTarget* bottomScreen;
+		C3D_RenderTarget* enumToTarget(screen_e screen);
+		void centredText(float x, float y, float xscale, float yscale, C3D_RenderTarget* screen, u32 colour, const char* string);
+
 };

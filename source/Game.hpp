@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Renderer.hpp"
-#include "SolidRect.hpp"
+#include "Rect.hpp"
 #include "citro2d.h"
+#include <vector>
+#include "Button.hpp"
 
 class Game
 {
@@ -10,16 +12,31 @@ class Game
 	Rect ball;
 	Rect leftPaddle;
 	Rect rightPaddle;
+	std::vector<Button> buttons;
+
 	u32 kDown;
 	u32 kDownPrev;
-	int leftScore;
-	int rightScore;
+	int leftPoints;
+	int rightPoints;
 private:
 	void draw();
 	void update();
-	bool handleInputs();
 	void moveBall();
+
+
+	bool insideX(float x1, float w1, float x2, float w2);
+	bool insideY(float x1, float w1, float x2, float w2);
+
+	bool collidedX(Rect r1, Rect r2);
+	bool collidedY(Rect r1, Rect r2);
+	void handlePaddleCollisions();
+	void handleWallCollisions();
 	void handleCollisions();
+
+	bool handleInputs();
+	void handleGoalsScored();
+
+	void pointScoredPause();
 public:
 	Game();
 	void run();

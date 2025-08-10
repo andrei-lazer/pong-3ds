@@ -1,4 +1,4 @@
-#include "SolidRect.hpp"
+#include "Rect.hpp"
 #include "common.hpp"
 #include <algorithm>
 #include <math.h>
@@ -11,6 +11,19 @@ void Rect::setVelocity(float newVX, float newVY)
 {
 	vX = newVX;
 	vY = newVY;
+}
+
+void Rect::setPosition(float newX, float newY)
+{
+	x = newX;
+	y = newY;
+}
+
+void Rect::setVelocityPolar(float mag, float angle)
+{
+	vX = mag * std::cos(angle);
+	vY = mag * std::sin(angle);
+
 }
 
 void Rect::reflectX()

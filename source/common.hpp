@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdlib>
+
 #define TOP_SCREEN_WIDTH 400.0
 #define TOP_SCREEN_HEIGHT 240.0
 #define BOTTOM_SCREEN_WIDTH 320.0
@@ -14,7 +16,12 @@ const u32 green = C2D_Color32(0x00, 0xFF, 0x00, 0xFF);
 const u32 red   = C2D_Color32(0xFF, 0x00, 0x00, 0xFF);
 const u32 blue  = C2D_Color32(0x00, 0x00, 0xFF, 0xFF);
 
-const u32 background_colour = C2D_Color32(0x68, 0xB0, 0xD8, 0xFF);
+/* const u32 background_colour = C2D_Color32(0x68, 0xB0, 0xD8, 0xFF); */
+const u32 background_colour = C2D_Color32(0x00, 0x00, 0x00, 0x00);
+
+const float PI = 3.14159;
+
+float randomFloat(float a, float b);
 
 namespace PongConstants
 {
@@ -23,7 +30,7 @@ namespace PongConstants
 	constexpr float BALL_SPAWN_Y = TOP_SCREEN_HEIGHT/2 - BALL_SIZE/2;
 
 	constexpr float PADDLE_WIDTH = 10.0f;
-	constexpr float PADDLE_HEIGHT = 50.0f;
+	constexpr float PADDLE_HEIGHT = 30.0f;
 
 	constexpr float LEFT_SPAWN_X = 10.0f;
 	constexpr float LEFT_SPAWN_Y = TOP_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
@@ -31,5 +38,9 @@ namespace PongConstants
 	constexpr float RIGHT_SPAWN_Y = TOP_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
 
 	constexpr float PADDLE_SPEED = 3.0f;
-	constexpr float BALL_SPEED = 3.0f;
+	constexpr float BALL_SPEED = 2.0f;
+
+	constexpr float BALL_SPIN_FACTOR = 0.3f;
 }
+
+void testFunc();
