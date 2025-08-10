@@ -2,7 +2,7 @@
 
 class Rect
 {
-private:
+protected:
 	float x;
 	float y;
 	float vX;
@@ -23,4 +23,12 @@ public:
 
 	const float w;
 	const float h;
+};
+
+class Ball : public Rect
+{
+	public:
+		Ball(float x, float y, float w, float h) : Rect(x, y, w, h) {}
+		void applySpin(float paddleVY);
+		void randomVelocity();
 };

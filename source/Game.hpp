@@ -6,13 +6,20 @@
 #include <vector>
 #include "Button.hpp"
 
+enum class GameState
+{
+	PLAYING,
+	PAUSE
+};
+
 class Game
 {
 	Renderer renderer;
-	Rect ball;
+	Ball ball;
 	Rect leftPaddle;
 	Rect rightPaddle;
-	std::vector<Button> buttons;
+	Button unpauseButton;
+	GameState state;
 
 	u32 kDown;
 	u32 kDownPrev;
@@ -36,7 +43,7 @@ private:
 	bool handleInputs();
 	void handleGoalsScored();
 
-	void pointScoredPause();
+	void pause();
 public:
 	Game();
 	void run();

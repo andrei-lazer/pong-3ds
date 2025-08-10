@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 #include <string>
 #include "Button.hpp"
+#include "common.hpp"
 
 Renderer::Renderer()
 {
@@ -68,27 +69,33 @@ void Renderer::drawScores(int leftScore, int rightScore)
 {
 	std::string leftString = std::to_string(leftScore);
 	std::string rightString = std::to_string(rightScore);
-	C2D_SceneBegin(bottomScreen);
+	/* C2D_SceneBegin(bottomScreen); */
 	// left score
-	C2D_TextBufClear(C2DTextBuf);
-	C2D_TextParse(&C2DText, C2DTextBuf, leftString.c_str());
-	C2D_TextOptimize(&C2DText);
-	C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 100, 100, 0.0f, 1.5, 1.5, white);
+	/* C2D_TextBufClear(C2DTextBuf); */
+	/* C2D_TextParse(&C2DText, C2DTextBuf, leftString.c_str()); */
+	/* C2D_TextOptimize(&C2DText); */
+	/* C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 100, 100, 0.0f, 1.5, 1.5, white); */
+	centredText(100, 100, 1.5, 1.5, bottomScreen, white, leftString.c_str());
 	// right score
-	C2D_TextBufClear(C2DTextBuf);
-	C2D_TextParse(&C2DText, C2DTextBuf, rightString.c_str());
-	C2D_TextOptimize(&C2DText);
-	C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 200, 100, 0.0f, 1.5, 1.5, white);
+	/* C2D_TextBufClear(C2DTextBuf); */
+	/* C2D_TextParse(&C2DText, C2DTextBuf, rightString.c_str()); */
+	/* C2D_TextOptimize(&C2DText); */
+	/* C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 200, 100, 0.0f, 1.5, 1.5, white); */
+	centredText(BOTTOM_SCREEN_WIDTH - 100, 100, 1.5, 1.5, bottomScreen, white, rightString.c_str());
 }
 
 void Renderer::drawButton(Button b)
 {
+	if (!b.visible)
+	{
+		return;
+	}
 	// draw the rectangle
 	C2D_SceneBegin(enumToTarget(b.screen));
 	// draw border
-	/* C2D_DrawRectSolid(b.x, b.y, 0, b.w, b.y, b.borderColour); */
-	/* C2D_DrawRectSolid(b.x+b.borderWidth, b.y+b.borderWidth, 0, b.w-b.borderWidth*2, b.y-b.borderWidth*2, b.bgColour); */
-	centredText(b.x + b.w/2, b.y + b.h/2, 1, 1, bottomScreen, b.bgColour, b.text);
+	C2D_DrawRectSolid(b.x, b.y, 0, b.w, b.h, b.borderColour);
+	C2D_DrawRectSolid(b.x+b.borderWidth, b.y+b.borderWidth, 0, b.w-b.borderWidth*2, b.h-b.borderWidth*2, b.bgColour);
+	centredText(b.x + b.w/2, b.y + b.h/2, 1, 1, bottomScreen, b.borderColour, b.text);
 }
 
 C3D_RenderTarget* Renderer::enumToTarget(screen_e screen)

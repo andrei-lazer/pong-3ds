@@ -40,4 +40,36 @@ void Rect::update()
 {
 	x += vX;
 	y += vY;
+
+	if (y < 0)
+	{
+		y = 0;
+	}
+	else if (y > TOP_SCREEN_HEIGHT - h)
+	{
+		y = TOP_SCREEN_HEIGHT - h;
+	}
+}
+
+void Ball::applySpin(float paddleVY)
+{
+	float angle = std::atan2(vY, vX);
+	angle += paddleVY * PongConstants::BALL_SPIN_FACTOR * (vX > 0 ? 1 : -1);
+
+	if ((std::abs(angle) > PongConstants::MAX_BALL_ANGLE) &&
+		(std::abs(angle) < PI - PongConstants::MAX_BALL_ANGLE))
+
+	{
+		angle = PongConstants::MAX_BALL_ANGLE * (angle > 0 ? 1 : -1);
+	}
+
+	setVelocityPolar(PongConstants::BALL_SPEED, angle);
+}
+
+void Ball::randomVelocity()
+{
+	float randomAngle = randomFloat(-PI/3, PI/3);
+	float leftOrRight = randomFloat(0, 1);
+	randomAngle += (leftOrRight >= 0.5 ? PI : 0);
+	setVelocityPolar(PongConstants::BALL_SPEED, randomAngle);
 }

@@ -2,6 +2,7 @@
 #include "common.hpp"
 #include <cmath>
 
+
 Game::Game()
 	: renderer(),
 	ball(
@@ -22,33 +23,38 @@ Game::Game()
 			PongConstants::PADDLE_WIDTH,
 			PongConstants::PADDLE_HEIGHT
 			),
-	buttons(),
+	unpauseButton(
+			BOTTOM_SCREEN_WIDTH/2-40, BOTTOM_SCREEN_HEIGHT/2-25,
+			80, 50,
+			"Go",
+			[this]()
+			{
+				state = GameState::PLAYING;
+				unpauseButton.visible = false;
+			},
+			Renderer::BOTTOM,
+			black,
+			white,
+			1),
+	state(GameState::PLAYING),
 	leftPoints(0), rightPoints(0)
 {
-	ball.setVelocity(-PongConstants::BALL_SPEED, 1);
-	ball.setVelocityPolar(PongConstants::BALL_SPEED, PI/3);
-	// adding buttons
-	Button nextPoint = Button(
-			100, 100,
-			200, 100,
-			"Go",
-			testFunc,
-			Renderer::BOTTOM,
-			red,
-			green,
-			10);
-	/* buttons.push_back(nextPoint); */
+	ball.randomVelocity();
+	unpauseButton.visible = false;
 }
 
-void Game::pointScoredPause()
+void Game::pause()
 {
-	// respawn the ball in the middle of the screen
+	// respawn sprites
 	ball.setPosition(PongConstants::BALL_SPAWN_X, PongConstants::BALL_SPAWN_Y);
+	leftPaddle.setPosition(PongConstants::LEFT_SPAWN_X, PongConstants::LEFT_SPAWN_Y);
+	rightPaddle.setPosition(PongConstants::RIGHT_SPAWN_X, PongConstants::RIGHT_SPAWN_Y);
 	// show a button on the bottom screen
-	//
+	state = GameState::PAUSE;
+	unpauseButton.visible = true;
+	
 	// start ball with random direction
-	float randomAngle = randomFloat(-PI/4, PI/4);
-	ball.setVelocityPolar(PongConstants::BALL_SPEED, randomAngle);
+	ball.randomVelocity();
 }
 
 bool Game::handleInputs()
@@ -60,8 +66,6 @@ bool Game::handleInputs()
 	{
 		return true;
 	}
-
-	// then, check for inputs!
 
 	// left paddle moves w dpad/circle pad
 	if (kDown & KEY_UP)
@@ -91,6 +95,20 @@ bool Game::handleInputs()
 		rightPaddle.setVelocity(0, 0);
 	}
 
+	// check touch inputs
+	touchPosition touch;
+	hidTouchRead(&touch);
+
+	// pressing button?
+	Button b = unpauseButton;
+	if (b.visible &&
+	   (touch.px >= b.x && touch.px <= b.x + b.w) &&
+	   (touch.py >= b.y && touch.py <= b.y + b.h))
+	{
+		b.onPress();
+	}
+
+
 	return false;
 }
 
@@ -107,17 +125,19 @@ bool Game::insideY(float y1, float w1, float y2, float w2)
 void Game::handlePaddleCollisions()
 {
 	std::vector<Rect> paddles = {leftPaddle, rightPaddle};
-	for (auto p : paddles)
+	for (auto& p : paddles)
 	{
 		// collided horizontally
 		float paddlePrevX = p.getX() - p.getVX();
 		float ballPrevX = ball.getX() - ball.getVX();
+		// checks that the rectangles overlap now, but didn't the last frame
 		if (!insideX(paddlePrevX, p.w, ballPrevX, ball.w)
 				&& insideY(p.getY(), p.h, ball.getY(), ball.h)
 				&& insideX(p.getX(), p.w, ball.getX(), ball.w))
 		{
+			// adds part of the velocity of the paddle to the ball as a sort of spin.
+			ball.applySpin(p.getVY());
 			ball.reflectX();
-			ball.setVelocity(ball.getVX(), ball.getVY() + p.getVY()*PongConstants::BALL_SPIN_FACTOR);
 		}
 
 		float paddlePrevY = p.getY() - p.getVY();
@@ -127,7 +147,6 @@ void Game::handlePaddleCollisions()
 				&& insideX(p.getX(), p.w, ball.getX(), ball.w))
 		{
 			ball.reflectY();
-			ball.setVelocity(ball.getVX() + p.getVX()*PongConstants::BALL_SPIN_FACTOR, ball.getVY());
 		}
 	}
 }
@@ -143,32 +162,16 @@ void Game::handleCollisions()
 		ball.reflectY();
 	}
 
-
 	// check if a score needs to be changed
 	if (ball.getX() <= 0)
 	{
-		/* rightScores(); */
 		rightPoints++;
-		pointScoredPause();
+		pause();
 	}
 	else if (ball.getX() >= TOP_SCREEN_WIDTH - PongConstants::BALL_SIZE)
 	{
 		leftPoints++;
-		pointScoredPause();
-	}
-
-	// make sure paddles don't go off screen
-	if ((leftPaddle.getY() <= 0 && leftPaddle.getVY() < 0) ||
-			(leftPaddle.getY() >= TOP_SCREEN_HEIGHT-PongConstants::PADDLE_HEIGHT && leftPaddle.getVY() > 0))
-	{
-		leftPaddle.setVelocity(leftPaddle.getVX(), 0);
-	}
-
-
-	if ((rightPaddle.getY() <= 0 && rightPaddle.getVY() < 0) ||
-			(rightPaddle.getY() >= TOP_SCREEN_HEIGHT-PongConstants::PADDLE_HEIGHT && rightPaddle.getVY() > 0))
-	{
-		rightPaddle.setVelocity(rightPaddle.getVX(), 0);
+		pause();
 	}
 }
 
@@ -186,10 +189,7 @@ void Game::draw()
 	renderer.drawScores(leftPoints, rightPoints);
 
 	// draw all the buttons
-	for (Button b : buttons)
-	{
-		renderer.drawButton(b);
-	}
+	renderer.drawButton(unpauseButton);
 
 	// never delete this - always needs to be at the end of the loop.
 	C3D_FrameEnd(0);
@@ -197,10 +197,17 @@ void Game::draw()
 
 void Game::update()
 {
-	handleCollisions();
-	leftPaddle.update();
-	rightPaddle.update();
-	ball.update();
+	if (state == GameState::PLAYING)
+	{
+		handleCollisions();
+		leftPaddle.update();
+		rightPaddle.update();
+		ball.update();
+	}
+	else if (state == GameState::PAUSE)
+	{
+		pause();
+	}
 }
 
 void Game::run()
@@ -219,3 +226,5 @@ void Game::run()
 }
 
 Game::~Game() {}
+
+
