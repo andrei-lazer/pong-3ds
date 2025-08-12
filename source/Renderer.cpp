@@ -95,7 +95,7 @@ void Renderer::drawButton(Button b)
 	// draw border
 	C2D_DrawRectSolid(b.x, b.y, 0, b.w, b.h, b.borderColour);
 	C2D_DrawRectSolid(b.x+b.borderWidth, b.y+b.borderWidth, 0, b.w-b.borderWidth*2, b.h-b.borderWidth*2, b.bgColour);
-	centredText(b.x + b.w/2, b.y + b.h/2, 1, 1, bottomScreen, b.borderColour, b.text);
+	centredText(b.x + b.w/2, b.y + b.h/2, b.textScale, b.textScale, bottomScreen, b.borderColour, b.text);
 }
 
 C3D_RenderTarget* Renderer::enumToTarget(screen_e screen)

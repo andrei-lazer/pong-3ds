@@ -7,9 +7,10 @@ class Button
 {
 public:
 	using Callback = std::function<void()>;
-	Button(float x, float y, float w, float h, const char* text, Callback cb, Renderer::screen_e screen, u32 bgColour, u32 borderColour, float borderWidth);
+	Button(float x, float y, float w, float h, const char* text, float textScale, Callback cb, Renderer::screen_e screen, u32 bgColour, u32 borderColour, float borderWidth);
 	const float x, y, w, h;
 	const char* text;
+	const float textScale;
 	const Renderer::screen_e screen;
 	const u32 bgColour;
 	const u32 borderColour;

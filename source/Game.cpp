@@ -26,7 +26,8 @@ Game::Game()
 	unpauseButton(
 			BOTTOM_SCREEN_WIDTH/2-40, BOTTOM_SCREEN_HEIGHT/2-25,
 			80, 50,
-			"Go",
+			"Press to\nserve",
+			0.5,
 			[this]()
 			{
 				state = GameState::PLAYING;
