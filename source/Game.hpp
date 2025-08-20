@@ -5,6 +5,7 @@
 #include "citro2d.h"
 #include <vector>
 #include "Button.hpp"
+#include "CPUPlayer.hpp"
 
 enum class GameState
 {
@@ -16,10 +17,12 @@ class Game
 {
 	Renderer renderer;
 	Ball ball;
-	Rect leftPaddle;
-	Rect rightPaddle;
+	Paddle leftPaddle;
+	Paddle rightPaddle;
 	Button unpauseButton;
 	GameState state;
+	bool isCPU;
+	CPU cpu;
 
 	u32 kDown;
 	u32 kDownPrev;
@@ -30,7 +33,6 @@ private:
 	void update();
 	void moveBall();
 
-
 	bool insideX(float x1, float w1, float x2, float w2);
 	bool insideY(float x1, float w1, float x2, float w2);
 
@@ -40,7 +42,7 @@ private:
 	void handleWallCollisions();
 	void handleCollisions();
 
-	bool handleInputs();
+	bool handleInputs(u32 kDown, touchPosition touch);
 	void handleGoalsScored();
 
 	void pause();

@@ -53,10 +53,9 @@ void Renderer::centredText(float x, float y, float xscale, float yscale, C3D_Ren
 	float width, height;
 	C2D_TextGetDimensions(&C2DText, xscale, yscale, &width, &height);
 
-	float cornerX = x - width/2;
 	float cornerY = y - height/2;
 
-	C2D_DrawText(&C2DText, C2D_WithColor, cornerX, cornerY, 0.0f, xscale, yscale, colour);
+	C2D_DrawText(&C2DText, C2D_WithColor | C2D_AlignCenter, x, cornerY, 0.0f, xscale, yscale, colour);
 }
 
 void Renderer::drawRect(Rect rect)
@@ -69,19 +68,16 @@ void Renderer::drawScores(int leftScore, int rightScore)
 {
 	std::string leftString = std::to_string(leftScore);
 	std::string rightString = std::to_string(rightScore);
-	/* C2D_SceneBegin(bottomScreen); */
-	// left score
-	/* C2D_TextBufClear(C2DTextBuf); */
-	/* C2D_TextParse(&C2DText, C2DTextBuf, leftString.c_str()); */
-	/* C2D_TextOptimize(&C2DText); */
-	/* C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 100, 100, 0.0f, 1.5, 1.5, white); */
-	centredText(100, 100, 1.5, 1.5, bottomScreen, white, leftString.c_str());
-	// right score
-	/* C2D_TextBufClear(C2DTextBuf); */
-	/* C2D_TextParse(&C2DText, C2DTextBuf, rightString.c_str()); */
-	/* C2D_TextOptimize(&C2DText); */
-	/* C2D_DrawText(&C2DText, C2D_AlignCenter | C2D_WithColor, 200, 100, 0.0f, 1.5, 1.5, white); */
-	centredText(BOTTOM_SCREEN_WIDTH - 100, 100, 1.5, 1.5, bottomScreen, white, rightString.c_str());
+	centredText(PongConstants::SCORE_X_DIST,
+			PongConstants::SCORE_Y_DIST,
+			PongConstants::SCORE_SCALE,
+			PongConstants::SCORE_SCALE,
+			bottomScreen, white, leftString.c_str());
+	centredText(BOTTOM_SCREEN_WIDTH - PongConstants::SCORE_X_DIST,
+			PongConstants::SCORE_Y_DIST,
+			PongConstants::SCORE_SCALE,
+			PongConstants::SCORE_SCALE,
+			bottomScreen, white, leftString.c_str());
 }
 
 void Renderer::drawButton(Button b)
@@ -90,11 +86,12 @@ void Renderer::drawButton(Button b)
 	{
 		return;
 	}
-	// draw the rectangle
 	C2D_SceneBegin(enumToTarget(b.screen));
-	// draw border
+	// border
 	C2D_DrawRectSolid(b.x, b.y, 0, b.w, b.h, b.borderColour);
+	// inner colour
 	C2D_DrawRectSolid(b.x+b.borderWidth, b.y+b.borderWidth, 0, b.w-b.borderWidth*2, b.h-b.borderWidth*2, b.bgColour);
+	// button text
 	centredText(b.x + b.w/2, b.y + b.h/2, b.textScale, b.textScale, bottomScreen, b.borderColour, b.text);
 }
 

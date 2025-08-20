@@ -7,3 +7,8 @@ float randomFloat(float a, float b)
 void testFunc()
 {
 }
+
+void log(const char* text)
+{
+
+}

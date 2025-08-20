@@ -58,8 +58,8 @@ void Ball::applySpin(float paddleVY)
 
 	if ((std::abs(angle) > PongConstants::MAX_BALL_ANGLE) &&
 		(std::abs(angle) < PI - PongConstants::MAX_BALL_ANGLE))
-
 	{
+		// ternary operator
 		angle = PongConstants::MAX_BALL_ANGLE * (angle > 0 ? 1 : -1);
 	}
 
@@ -72,4 +72,19 @@ void Ball::randomVelocity()
 	float leftOrRight = randomFloat(0, 1);
 	randomAngle += (leftOrRight >= 0.5 ? PI : 0);
 	setVelocityPolar(PongConstants::BALL_SPEED, randomAngle);
+}
+
+void Paddle::moveUp()
+{
+	vY = -PongConstants::PADDLE_SPEED;
+}
+
+void Paddle::moveDown()
+{
+	vY = PongConstants::PADDLE_SPEED;
+}
+
+void Paddle::stop()
+{
+	vY = 0;
 }

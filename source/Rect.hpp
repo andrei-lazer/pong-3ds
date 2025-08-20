@@ -32,3 +32,13 @@ class Ball : public Rect
 		void applySpin(float paddleVY);
 		void randomVelocity();
 };
+
+
+class Paddle : public Rect
+{
+	public:
+		Paddle(float x, float y, float w, float h) : Rect(x, y, w, h) {}
+		void moveUp();
+		void moveDown();
+		void stop();
+};

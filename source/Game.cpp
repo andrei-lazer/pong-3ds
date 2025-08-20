@@ -2,7 +2,6 @@
 #include "common.hpp"
 #include <cmath>
 
-
 Game::Game()
 	: renderer(),
 	ball(
@@ -37,7 +36,9 @@ Game::Game()
 			black,
 			white,
 			1),
-	state(GameState::PLAYING),
+	state(GameState::PAUSE),
+	isCPU(true),
+	cpu(rightPaddle, ball),
 	leftPoints(0), rightPoints(0)
 {
 	ball.randomVelocity();
@@ -58,7 +59,7 @@ void Game::pause()
 	ball.randomVelocity();
 }
 
-bool Game::handleInputs()
+bool Game::handleInputs(u32 kDown, touchPosition touch)
 {
 	hidScanInput();
 	kDown = hidKeysHeld();
@@ -68,39 +69,48 @@ bool Game::handleInputs()
 		return true;
 	}
 
+	// cpu on/off if press select
+	if (kDown & KEY_SELECT)
+	{
+		isCPU = !isCPU;
+	}
+
 	// left paddle moves w dpad/circle pad
 	if (kDown & KEY_UP)
 	{
-		leftPaddle.setVelocity(0, -PongConstants::PADDLE_SPEED);
+		leftPaddle.moveUp();
 	}
 	else if (kDown & KEY_DOWN)
 	{
-		leftPaddle.setVelocity(0, PongConstants::PADDLE_SPEED);
+		leftPaddle.moveDown();
 	}
 	else
 	{
-		leftPaddle.setVelocity(0, 0);
+		leftPaddle.stop();
 	}
 
-	// right paddle moves with XYAB
-	if (kDown & KEY_X)
+	// right paddle moves with X/B, only if CPU is off
+	if (!isCPU)
 	{
-		rightPaddle.setVelocity(0, -PongConstants::PADDLE_SPEED);
-	}
-	else if (kDown & KEY_B)
-	{
-		rightPaddle.setVelocity(0, PongConstants::PADDLE_SPEED);
+		if (kDown & KEY_X)
+		{
+			rightPaddle.moveUp();
+		}
+		else if (kDown & KEY_B)
+		{
+			rightPaddle.moveDown();
+		}
+		else
+		{
+			rightPaddle.stop();
+		}
 	}
 	else
 	{
-		rightPaddle.setVelocity(0, 0);
+		cpu.controlPaddle();
 	}
 
 	// check touch inputs
-	touchPosition touch;
-	hidTouchRead(&touch);
-
-	// pressing button?
 	Button b = unpauseButton;
 	if (b.visible &&
 	   (touch.px >= b.x && touch.px <= b.x + b.w) &&
@@ -108,7 +118,6 @@ bool Game::handleInputs()
 	{
 		b.onPress();
 	}
-
 
 	return false;
 }
@@ -156,13 +165,12 @@ void Game::handleCollisions()
 {
 	handlePaddleCollisions();
 
-	// make ball bounce off the top and botton, and the paddles
-	bool bounceOffTopBottom = ball.getY() <= 0 || ball.getY() >= TOP_SCREEN_HEIGHT - ball.h;
+	bool bounceOffTopBottom = ball.getY() <= 0 ||
+		ball.getY() >= TOP_SCREEN_HEIGHT - ball.h;
 	if (bounceOffTopBottom)
 	{
 		ball.reflectY();
 	}
-
 	// check if a score needs to be changed
 	if (ball.getX() <= 0)
 	{
@@ -216,7 +224,12 @@ void Game::run()
 	// variables for key and touch input
 	while (aptMainLoop())
 	{
-		if(handleInputs())
+		hidScanInput();
+		u32 kDown = hidKeysDown();
+		touchPosition touch;
+		hidTouchRead(&touch);
+
+		if(handleInputs(kDown, touch))
 		{
 			break;
 		}
@@ -227,5 +240,3 @@ void Game::run()
 }
 
 Game::~Game() {}
-
-
