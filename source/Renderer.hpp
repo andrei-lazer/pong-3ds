@@ -24,12 +24,12 @@ class Renderer {
 		void drawRect(const Rect& rect);
 		void drawScores(int leftScore, int rightScore);
 		void drawButton(const Button& b);
+		void centredText(float x, float y, float xscale, float yscale, screen_e screen, u32 colour, const char* text);
 	private:
 		C2D_TextBuf C2DTextBuf;
 		C2D_Text C2DText;
 		C3D_RenderTarget* topScreen;
 		C3D_RenderTarget* bottomScreen;
-		C3D_RenderTarget* enumToTarget(screen_e screen);
-		void centredText(float x, float y, float xscale, float yscale, C3D_RenderTarget* screen, u32 colour, const char* string);
+		C3D_RenderTarget* getScreen(screen_e screen);
 
 };

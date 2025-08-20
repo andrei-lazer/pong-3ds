@@ -43,9 +43,9 @@ void Renderer::clearBottomScreen()
 	C2D_TargetClear(bottomScreen, background_colour);
 }
 
-void Renderer::centredText(float x, float y, float xscale, float yscale, C3D_RenderTarget* screen, u32 colour, const char* text)
+void Renderer::centredText(float x, float y, float xscale, float yscale, screen_e screen, u32 colour, const char* text)
 {
-	C2D_SceneBegin(screen);
+	C2D_SceneBegin(getScreen(screen));
 	C2D_TextBufClear(C2DTextBuf);
 	C2D_TextParse(&C2DText, C2DTextBuf, text);
 	C2D_TextOptimize(&C2DText);
@@ -72,12 +72,12 @@ void Renderer::drawScores(int leftScore, int rightScore)
 			PongConstants::SCORE_Y_DIST,
 			PongConstants::SCORE_SCALE,
 			PongConstants::SCORE_SCALE,
-			bottomScreen, white, leftString.c_str());
+			BOTTOM, white, leftString.c_str());
 	centredText(BOTTOM_SCREEN_WIDTH - PongConstants::SCORE_X_DIST,
 			PongConstants::SCORE_Y_DIST,
 			PongConstants::SCORE_SCALE,
 			PongConstants::SCORE_SCALE,
-			bottomScreen, white, rightString.c_str());
+			BOTTOM, white, rightString.c_str());
 }
 
 void Renderer::drawButton(const Button& b)
@@ -86,16 +86,16 @@ void Renderer::drawButton(const Button& b)
 	{
 		return;
 	}
-	C2D_SceneBegin(enumToTarget(b.screen));
+	C2D_SceneBegin(getScreen(b.screen));
 	// border
 	C2D_DrawRectSolid(b.x, b.y, 0, b.w, b.h, b.borderColour);
 	// inner colour
 	C2D_DrawRectSolid(b.x+b.borderWidth, b.y+b.borderWidth, 0, b.w-b.borderWidth*2, b.h-b.borderWidth*2, b.bgColour);
 	// button text
-	centredText(b.x + b.w/2, b.y + b.h/2, b.textScale, b.textScale, bottomScreen, b.borderColour, b.text);
+	centredText(b.x + b.w/2, b.y + b.h/2, b.textScale, b.textScale, BOTTOM, b.borderColour, b.text);
 }
 
-C3D_RenderTarget* Renderer::enumToTarget(screen_e screen)
+C3D_RenderTarget* Renderer::getScreen(screen_e screen)
 {
 	switch (screen)
 	{

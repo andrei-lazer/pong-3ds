@@ -44,6 +44,10 @@ namespace PongConstants
 	constexpr float SCORE_X_DIST = 50;
 	constexpr float SCORE_Y_DIST = BOTTOM_SCREEN_HEIGHT/2;
 	constexpr float SCORE_SCALE = 1;
+
+	constexpr float CPU_TEXT_X = 60;
+	constexpr float CPU_TEXT_Y = TOP_SCREEN_HEIGHT-25;
+	constexpr float CPU_TEXT_SCALE = 0.5;
 }
 
 void testFunc();

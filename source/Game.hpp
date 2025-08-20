@@ -17,6 +17,7 @@ enum class GameState
 
 class Game
 {
+	// large classes are kept in unique pointers to avoid memory leaks
 	std::unique_ptr<Renderer> renderer;
 	std::unique_ptr<Ball> ball;
 	std::unique_ptr<Paddle> leftPaddle;

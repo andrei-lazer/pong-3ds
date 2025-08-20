@@ -2,7 +2,6 @@
 #include "common.hpp"
 #include <cmath>
 
-
 Game::Game() :
 	renderer(make_unique<Renderer>()),
 	ball(make_unique<Ball>(
@@ -63,6 +62,7 @@ void Game::pause()
 
 bool Game::handleInputs(u32 kDown, touchPosition touch)
 {
+	static u32 kDownPrev = 0;
 	hidScanInput();
 	kDown = hidKeysHeld();
 	// return true if exiting
@@ -72,7 +72,7 @@ bool Game::handleInputs(u32 kDown, touchPosition touch)
 	}
 
 	// cpu on/off if press select
-	if (kDown & KEY_SELECT)
+	if (kDown & KEY_SELECT && kDownPrev != kDown)
 	{
 		isCPU = !isCPU;
 	}
@@ -112,6 +112,7 @@ bool Game::handleInputs(u32 kDown, touchPosition touch)
 		cpu->controlPaddle();
 	}
 
+	kDownPrev = kDown;
 	// check touch inputs
 	for (Button* b : {unpauseButton.get()})
 	{
@@ -202,6 +203,16 @@ void Game::draw()
 
 	// draw all the buttons
 	renderer->drawButton(*unpauseButton);
+
+	// draw CPU status
+	if (isCPU)
+	{
+		renderer->centredText(PongConstants::CPU_TEXT_X, PongConstants::CPU_TEXT_Y, 0.5, 0.5, Renderer::BOTTOM, white, "CPU: ON");
+	}
+	else
+	{
+		renderer->centredText(PongConstants::CPU_TEXT_X, PongConstants::CPU_TEXT_Y, 0.5, 0.5, Renderer::BOTTOM, white, "CPU: OFF");
+	}
 
 	// never delete this - always needs to be at the end of the draw loop.
 	C3D_FrameEnd(0);

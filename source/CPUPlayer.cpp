@@ -15,13 +15,9 @@ float CPU::expectedY(float paddleX, float ballX, float ballY, float ballVX, floa
 	{
 		timeToHit = (paddleX + ballX) / -ballVX;
 	}
-	if (timeToHit < 0)
-	{
-		paddle.setPosition(0, 0);
-	}
 	float overallY = ballY + ballVY*timeToHit;
 	// use bounces to predict where the ball will hit
-	int numberOfBounce = (int)overallY / TOP_SCREEN_HEIGHT;
+	int numberOfBounce = std::abs((int)overallY / TOP_SCREEN_HEIGHT);
 	float bouncedY;
 	if (numberOfBounce % 2 == 0)
 	{
