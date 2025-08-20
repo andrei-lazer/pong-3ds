@@ -9,10 +9,10 @@ protected:
 	float vY;
 public:
 	Rect(float x, float y, float w, float h);
-	float getX() { return x; };
-	float getY() { return y; };
-	float getVX() { return vX; };
-	float getVY() { return vY; };
+	float getX() const { return x; };
+	float getY() const { return y; };
+	float getVX() const { return vX; };
+	float getVY() const { return vY; };
 
 	void setVelocity(float newVX, float newVY);
 	void setVelocityPolar(float mag, float angle);

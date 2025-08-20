@@ -2,10 +2,12 @@
 
 #include "Renderer.hpp"
 #include "Rect.hpp"
-#include "citro2d.h"
-#include <vector>
 #include "Button.hpp"
 #include "CPUPlayer.hpp"
+
+#include "citro2d.h"
+#include <vector>
+#include <memory>
 
 enum class GameState
 {
@@ -15,14 +17,14 @@ enum class GameState
 
 class Game
 {
-	Renderer renderer;
-	Ball ball;
-	Paddle leftPaddle;
-	Paddle rightPaddle;
-	Button unpauseButton;
+	std::unique_ptr<Renderer> renderer;
+	std::unique_ptr<Ball> ball;
+	std::unique_ptr<Paddle> leftPaddle;
+	std::unique_ptr<Paddle> rightPaddle;
+	std::unique_ptr<Button> unpauseButton;
 	GameState state;
 	bool isCPU;
-	CPU cpu;
+	std::unique_ptr<CPU> cpu;
 
 	u32 kDown;
 	u32 kDownPrev;
@@ -49,5 +51,5 @@ private:
 public:
 	Game();
 	void run();
-	~Game();
+	~Game() = default;
 };

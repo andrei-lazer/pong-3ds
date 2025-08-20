@@ -21,9 +21,9 @@ class Renderer {
 		void initFrame();
 		void clearTopScreen();
 		void clearBottomScreen();
-		void drawRect(Rect rect);
+		void drawRect(const Rect& rect);
 		void drawScores(int leftScore, int rightScore);
-		void drawButton(Button b);
+		void drawButton(const Button& b);
 	private:
 		C2D_TextBuf C2DTextBuf;
 		C2D_Text C2DText;

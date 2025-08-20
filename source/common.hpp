@@ -8,8 +8,8 @@
 #define BOTTOM_SCREEN_HEIGHT 240.0f
 
 #define PI M_PI
-// #include "c2d/base.h"
 #include <citro2d.h>
+#include <memory>
 
 const u32 white = C2D_Color32(0xFF, 0xFF, 0xFF, 0xFF);
 const u32 black = C2D_Color32(0x00, 0x00, 0x00, 0xFF);
@@ -47,3 +47,8 @@ namespace PongConstants
 }
 
 void testFunc();
+
+template <typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}

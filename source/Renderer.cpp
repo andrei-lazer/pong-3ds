@@ -58,7 +58,7 @@ void Renderer::centredText(float x, float y, float xscale, float yscale, C3D_Ren
 	C2D_DrawText(&C2DText, C2D_WithColor | C2D_AlignCenter, x, cornerY, 0.0f, xscale, yscale, colour);
 }
 
-void Renderer::drawRect(Rect rect)
+void Renderer::drawRect(const Rect& rect)
 {
 	C2D_SceneBegin(topScreen);
 	C2D_DrawRectSolid(rect.getX(), rect.getY(), 0, rect.w, rect.h, white);
@@ -77,10 +77,10 @@ void Renderer::drawScores(int leftScore, int rightScore)
 			PongConstants::SCORE_Y_DIST,
 			PongConstants::SCORE_SCALE,
 			PongConstants::SCORE_SCALE,
-			bottomScreen, white, leftString.c_str());
+			bottomScreen, white, rightString.c_str());
 }
 
-void Renderer::drawButton(Button b)
+void Renderer::drawButton(const Button& b)
 {
 	if (!b.visible)
 	{

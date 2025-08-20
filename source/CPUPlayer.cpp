@@ -13,7 +13,11 @@ float CPU::expectedY(float paddleX, float ballX, float ballY, float ballVX, floa
 	}
 	else
 	{
-		timeToHit = (paddleX + ballX) / ballVX;
+		timeToHit = (paddleX + ballX) / -ballVX;
+	}
+	if (timeToHit < 0)
+	{
+		paddle.setPosition(0, 0);
 	}
 	float overallY = ballY + ballVY*timeToHit;
 	// use bounces to predict where the ball will hit
@@ -21,11 +25,11 @@ float CPU::expectedY(float paddleX, float ballX, float ballY, float ballVX, floa
 	float bouncedY;
 	if (numberOfBounce % 2 == 0)
 	{
-		bouncedY = std::fmod(overallY, TOP_SCREEN_HEIGHT);
+		bouncedY = overallY - numberOfBounce*TOP_SCREEN_HEIGHT;
 	}
 	else
 	{
-		bouncedY = TOP_SCREEN_HEIGHT - std::fmod(overallY, TOP_SCREEN_HEIGHT);
+		bouncedY = (numberOfBounce+1)*TOP_SCREEN_HEIGHT - overallY;
 	}
 	return bouncedY;
 	
@@ -36,7 +40,7 @@ void CPU::controlPaddle()
 	static int frame = 0;
 	// guess where the ball ends up - only works for right side right now
 	float targetY = expectedY(paddle.getX(), ball.getX(), ball.getY(), ball.getVX(), ball.getVY());
-	
+
 	// check displacement every 10 frames
 	float targetDisplacement = targetY - paddle.getY();
 	frame ++;
