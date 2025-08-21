@@ -1,6 +1,4 @@
 #include "Game.hpp"
-#include "common.hpp"
-#include <cmath>
 
 Game::Game() :
 	renderer(make_unique<Renderer>()),
@@ -31,6 +29,7 @@ Game::Game() :
 			black,
 			white,
 			1,
+			// lambda function for unpausing the game.
 			[this]()
 			{
 				state = GameState::PLAYING;
@@ -65,6 +64,7 @@ bool Game::handleInputs(u32 kDown, touchPosition touch)
 	static u32 kDownPrev = 0;
 	hidScanInput();
 	kDown = hidKeysHeld();
+
 	// return true if exiting
 	if (kDown & KEY_START)
 	{
@@ -114,6 +114,7 @@ bool Game::handleInputs(u32 kDown, touchPosition touch)
 
 	kDownPrev = kDown;
 	// check touch inputs
+	// using a for loop in case I add more buttons
 	for (Button* b : {unpauseButton.get()})
 	{
 		if (b->visible &&
@@ -132,24 +133,23 @@ bool Game::insideX(float x1, float w1, float x2, float w2)
 	return (x1 + w1 >= x2) && (x2 + w2 >= x1);
 }
 
-bool Game::insideY(float y1, float w1, float y2, float w2)
+bool Game::insideY(float y1, float h1, float y2, float h2)
 {
-	return (y1 + w1 >= y2) && (y2 + w2 >= y1);
+	return (y1 + h1 >= y2) && (y2 + h2 >= y1);
 }
 
-void Game::handlePaddleCollisions()
+void Game::handleCollisions()
 {
 	for (Paddle* p : {leftPaddle.get(), rightPaddle.get()})
 	{
 		// collided horizontally
 		float paddlePrevX = p->getX() - p->getVX();
 		float ballPrevX = ball->getX() - ball->getVX();
-		// checks that the rectangles overlap now, but didn't the last frame
+		// checks that the rectangles only started overlapping in the x direction in the last frame.
 		if (!insideX(paddlePrevX, p->w, ballPrevX, ball->w)
 				&& insideY(p->getY(), p->h, ball->getY(), ball->h)
 				&& insideX(p->getX(), p->w, ball->getX(), ball->w))
 		{
-			// adds part of the velocity of the paddle to the ball as a sort of spin.
 			ball->applySpin(p->getVY());
 			ball->reflectX();
 		}
@@ -163,11 +163,6 @@ void Game::handlePaddleCollisions()
 			ball->reflectY();
 		}
 	}
-}
-
-void Game::handleCollisions()
-{
-	handlePaddleCollisions();
 
 	bool bounceOffTopBottom = ball->getY() <= 0 ||
 		ball->getY() >= TOP_SCREEN_HEIGHT - ball->h;
@@ -235,7 +230,6 @@ void Game::update()
 
 void Game::run()
 {
-	// variables for key and touch input
 	while (aptMainLoop())
 	{
 		hidScanInput();

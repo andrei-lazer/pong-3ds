@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rect.hpp"
+#include "common.hpp"
 
 class CPU
 {
@@ -10,5 +11,4 @@ public:
 private:
 	Paddle& paddle;
 	Ball& ball;
-	float expectedY(float paddleX, float ballX, float ballY, float ballVX, float ballVY);
 };

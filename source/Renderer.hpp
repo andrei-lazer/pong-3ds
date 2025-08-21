@@ -1,12 +1,13 @@
 #pragma once
 
-#include "citro2d.h"
-#include <map>
 #include <string>
 
-#include "common.hpp"
+#include "citro2d.h"
+
 #include "Rect.hpp"
-/* #include "Button.hpp" */
+#include "common.hpp"
+
+// button class declared here in order to avoid circular dependancy.
 class Button;
 
 class Renderer {

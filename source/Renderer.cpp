@@ -1,7 +1,5 @@
 #include "Renderer.hpp"
-#include <string>
 #include "Button.hpp"
-#include "common.hpp"
 
 Renderer::Renderer()
 {

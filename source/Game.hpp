@@ -4,10 +4,10 @@
 #include "Rect.hpp"
 #include "Button.hpp"
 #include "CPUPlayer.hpp"
+#include "common.hpp"
 
-#include "citro2d.h"
-#include <vector>
 #include <memory>
+#include <initializer_list>
 
 enum class GameState
 {
@@ -34,19 +34,15 @@ class Game
 private:
 	void draw();
 	void update();
-	void moveBall();
 
 	bool insideX(float x1, float w1, float x2, float w2);
 	bool insideY(float x1, float w1, float x2, float w2);
 
 	bool collidedX(Rect r1, Rect r2);
 	bool collidedY(Rect r1, Rect r2);
-	void handlePaddleCollisions();
-	void handleWallCollisions();
 	void handleCollisions();
 
 	bool handleInputs(u32 kDown, touchPosition touch);
-	void handleGoalsScored();
 
 	void pause();
 public:

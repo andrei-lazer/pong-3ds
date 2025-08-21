@@ -1,5 +1,9 @@
 #pragma once
 
+#include "common.hpp"
+#include <algorithm>
+#include <math.h>
+
 class Rect
 {
 protected:
@@ -19,6 +23,7 @@ public:
 	void setPosition(float newX, float newY);
 	void reflectX();
 	void reflectY();
+	void update(float dt);
 	void update();
 
 	const float w;
@@ -32,7 +37,6 @@ class Ball : public Rect
 		void applySpin(float paddleVY);
 		void randomVelocity();
 };
-
 
 class Paddle : public Rect
 {
