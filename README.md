@@ -12,9 +12,11 @@ A remake of Pong for the Nintendo 3DS.
 ## To-Do
 - CPU is a bit shaky
 
+
+
 ## Gameplay
 
-![Demo GIF](./docs/pong demo.mp4)
+https://github.com/user-attachments/assets/6171292d-c38b-48ab-b44b-e0dd9e1cf837
 
 ## Quick installation
 For the easiest installation, scan the following QR code using the FBI app.
