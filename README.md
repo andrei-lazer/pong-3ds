@@ -9,8 +9,9 @@ A remake of Pong for the Nintendo 3DS.
 - Game pauses when someone scores.
 - Scores are shown on the bottom screen.
 
-## To-Do
-- CPU is a bit shaky
+## Potential To-Dos
+- Fix shaky CPU player
+- Add difficulty levels for the CPU
 
 
 
@@ -23,7 +24,7 @@ For the easiest installation, scan the following QR code using the FBI app.
 
 ![QR Code](docs/qr.png "QR Code for Pong.cia")
 
-Then, press play!
+Then, play!
 
 ## Manual installation
 Drag the .cia file onto your 3DS SD card, and install it using the FBI app.
@@ -34,5 +35,5 @@ Drag the .cia file onto your 3DS SD card, and install it using the FBI app.
 |-----|--------|
 |Circle Pad / D-Pad | Move the left paddle|
 | SELECT | Turn on/off the CPU player on the right paddle (on by default) |
-| X/B | Move the right paddle |
-| START | Quit to main menu |
+| X/B | Move the right paddle when CPU is off |
+| START | Quit|
