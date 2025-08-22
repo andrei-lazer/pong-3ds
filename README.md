@@ -19,21 +19,19 @@ A remake of Pong for the Nintendo 3DS.
 
 https://github.com/user-attachments/assets/6171292d-c38b-48ab-b44b-e0dd9e1cf837
 
-## Quick installation
+## Installation
+This is a Homebrew app, so it requires a modded 3DS with custom firmware installed, namely the FBI app.
 For the easiest installation, scan the following QR code using the FBI app.
 
 ![QR Code](docs/qr.png "QR Code for Pong.cia")
 
 Then, play!
 
-## Manual installation
-Drag the .cia file onto your 3DS SD card, and install it using the FBI app.
-
 ## Controls
 
 | Key | Action |
 |-----|--------|
-|Circle Pad / D-Pad | Move the left paddle|
+| Circle Pad / D-Pad | Move the left paddle |
 | SELECT | Turn on/off the CPU player on the right paddle (on by default) |
 | X/B | Move the right paddle when CPU is off |
-| START | Quit|
+| START | Quit |
